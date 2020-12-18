@@ -1,4 +1,3 @@
-"# goodmoim" 
 
 
 <h1 align="center">goodmoim</h1>
