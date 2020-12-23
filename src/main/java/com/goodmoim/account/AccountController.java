@@ -20,8 +20,8 @@ import javax.validation.Valid;
 public class AccountController {
 
     private final SignUpFormValidator signUpFormValidator;
-    private final AccountRepository accountRepository;
-    private final JavaMailSender javaMailSender;
+    private final AccountService accountService;
+
 
     @InitBinder("signUpForm")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -36,28 +36,11 @@ public class AccountController {
 
     @PostMapping("/sign-up")
     public String signUpSubmit(@Valid SignUpForm signUpForm, Errors errors) {
-        if (errors.hasErrors()) {
+        if (errors.hasErrors()) { // 에러가 있을 경우
             return "account/sign-up";
         }
-
-        Account account = Account.builder()
-                .email(signUpForm.getEmail())
-                .nickname(signUpForm.getNickname())
-                .password(signUpForm.getPassword()) // TODO encoding 해야함
-                .meetCreatedByWeb(true)
-                .meetEnrollmentResultByWeb(true)
-                .meetUpdatedByWeb(true)
-                .build();
-        Account newAccount = accountRepository.save(account);
-        newAccount.generateEmailCheckToken();
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(newAccount.getEmail());
-        mailMessage.setSubject("meet, 회원 가입 인증");
-        mailMessage.setText("/check-email-token?token=" + newAccount.getEmailCheckToken() +
-                "&email=" + newAccount.getEmail());
-        javaMailSender.send(mailMessage);
-
+        // 에러가 없을 경우
+        accountService.processNewAccount(signUpForm);
         return "redirect:/";
     }
-
 }
