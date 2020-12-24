@@ -1,6 +1,7 @@
 package com.goodmoim.account;
 
 
+import com.goodmoim.domain.Account;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -68,8 +69,9 @@ public class AccountControllerTest {
                 .andExpect(view().name("redirect:/"));
 
         // 이메일이 있는지 확인
-        assertTrue(accountRepository.existsByEmail("keesun@email.com"));
-
+        Account account = accountRepository.findByEmail("keesun@email.com");
+        assertNotNull(account);
+        assertNotEquals(account.getPassword(), "12345678"); //즉 평문 그대로 저장 안한다는 것이 입증됨
         // 아무런 타입 SimpleMailMessage 인스턴스를 가지고 sender가 호출되었는가만 확인 -> 메일을 보냈는지 확인하는 것
         then(javaMailSender).should().send(any(SimpleMailMessage.class));
     }
