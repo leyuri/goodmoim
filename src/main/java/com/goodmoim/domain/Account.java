@@ -54,4 +54,10 @@ public class Account {
     public void generateEmailCheckToken() {
         this.emailCheckToken = UUID.randomUUID().toString();
     }
+
+    // 이 두 라인은 account 에서 한번에 이루어져야 한다. (같은 로직)
+    public void completeSignUp(Account account) {
+        this.emailVerified = true;
+        this.joinedAt = LocalDateTime.now();
+    }
 }
