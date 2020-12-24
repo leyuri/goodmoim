@@ -72,6 +72,7 @@ public class AccountControllerTest {
         Account account = accountRepository.findByEmail("keesun@email.com");
         assertNotNull(account);
         assertNotEquals(account.getPassword(), "12345678"); //즉 평문 그대로 저장 안한다는 것이 입증됨
+        assertNotNull(account.getEmailCheckToken());
         // 아무런 타입 SimpleMailMessage 인스턴스를 가지고 sender가 호출되었는가만 확인 -> 메일을 보냈는지 확인하는 것
         then(javaMailSender).should().send(any(SimpleMailMessage.class));
     }
