@@ -4,9 +4,14 @@ import com.goodmoim.domain.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor // final 이나 @NonNull 인 필드 값만 파라미터로 받는 생성자를 만들어줌
@@ -16,10 +21,11 @@ public class AccountService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public void processNewAccount(SignUpForm signUpForm) {
+    public Account processNewAccount(SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm); // signUpForm 를 통해 새 계정을 저장
         newAccount.generateEmailCheckToken(); // check token 만들기
         sendSignUpConfirmEmail(newAccount); // 확인 이메일 보내기
+        return newAccount;
     }
 
     private Account saveNewAccount(SignUpForm signUpForm) {
@@ -45,4 +51,12 @@ public class AccountService {
     }
 
 
+    public void login(Account account) {
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                account.getNickname(),
+                account.getPassword(),
+                List.of(new SimpleGrantedAuthority("ROLE_USER")));
+        SecurityContextHolder.getContext().setAuthentication(token);
+
+    }
 }
