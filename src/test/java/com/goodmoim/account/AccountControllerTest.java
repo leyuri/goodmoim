@@ -22,6 +22,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 
 @Transactional
 @SpringBootTest
@@ -45,8 +47,8 @@ public class AccountControllerTest {
                 .param("token", "sdfjslwfwef")
                 .param("email", "email@email.com"))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("error"))
-                .andExpect(view().name("account/checked-email"));
+                .andExpect(view().name("account/checked-email"))
+                .andExpect(unauthenticated());
     }
 
     @DisplayName("인증 메일 확인 - 입력값 정상")
@@ -67,11 +69,9 @@ public class AccountControllerTest {
                 .andExpect(model().attributeDoesNotExist("error"))
                 .andExpect(model().attributeExists("nickname"))
                 .andExpect(model().attributeExists("numberOfUser"))
-                .andExpect(view().name("account/checked-email"));
+                .andExpect(view().name("account/checked-email"))
+                .andExpect(authenticated().withUsername("keesun"));
     }
-
-
-
 
     @DisplayName("회원 가입 화면이 보이는지 테스트")
     @Test
@@ -80,7 +80,8 @@ public class AccountControllerTest {
                 .andDo(print()) //내용을 볼 수도 있다
                 .andExpect(status().isOk())
                 .andExpect(view().name("account/sign-up"))
-                .andExpect(model().attributeExists("signUpForm"));
+                .andExpect(model().attributeExists("signUpForm"))
+                .andExpect(unauthenticated());
         //이 attributeExists가 없으면 에러가 나니까 추가해줌, 매번 뷰를 보면서 찾기 힘들기 때문에 ..
     }
 
@@ -93,7 +94,8 @@ public class AccountControllerTest {
                 .param("password", "12345")
                 .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name("account/sign-up"));
+                .andExpect(view().name("account/sign-up"))
+                .andExpect(unauthenticated());
     }
 
     @DisplayName("회원 가입 처리 - 입력값 정상")
@@ -105,7 +107,8 @@ public class AccountControllerTest {
                 .param("password", "12345678")
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/"));
+                .andExpect(view().name("redirect:/"))
+                .andExpect(authenticated().withUsername("keesun"));
 
         // 이메일이 있는지 확인
         Account account = accountRepository.findByEmail("keesun@email.com");
