@@ -47,6 +47,7 @@ public class AccountControllerTest {
                 .param("token", "sdfjslwfwef")
                 .param("email", "email@email.com"))
                 .andExpect(status().isOk())
+                .andExpect(model().attributeExists("error"))
                 .andExpect(view().name("account/checked-email"))
                 .andExpect(unauthenticated());
     }
