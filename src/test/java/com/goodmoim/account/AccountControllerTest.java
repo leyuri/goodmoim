@@ -55,19 +55,19 @@ public class AccountControllerTest {
     @DisplayName("인증 메일 확인 - 입력값 정상")
     @Test
     void checkEmailToken() throws Exception {
-        Account account = Account.builder()
+        Account account = Account.builder() // account를 하나 만들어서 실제로 저장함
                 .email("test@email.com")
                 .password("12345678")
                 .nickname("keesun")
                 .build();
         Account newAccount = accountRepository.save(account);
-        newAccount.generateEmailCheckToken();
+        newAccount.generateEmailCheckToken(); // 이메일 토큰 생성
 
         mockMvc.perform(get("/check-email-token")
                 .param("token", newAccount.getEmailCheckToken())
                 .param("email", newAccount.getEmail()))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeDoesNotExist("error"))
+                .andExpect(model().attributeDoesNotExist("error")) // 에러는 없어야 함
                 .andExpect(model().attributeExists("nickname"))
                 .andExpect(model().attributeExists("numberOfUser"))
                 .andExpect(view().name("account/checked-email"))
@@ -115,7 +115,7 @@ public class AccountControllerTest {
         Account account = accountRepository.findByEmail("keesun@email.com");
         assertNotNull(account);
         assertNotEquals(account.getPassword(), "12345678"); //즉 평문 그대로 저장 안한다는 것이 입증됨
-        assertNotNull(account.getEmailCheckToken());
+        assertNotNull(account.getEmailCheckToken()); // 토큰이 null 이 아닌지 확인하기
         // 아무런 타입 SimpleMailMessage 인스턴스를 가지고 sender가 호출되었는가만 확인 -> 메일을 보냈는지 확인하는 것
         then(javaMailSender).should().send(any(SimpleMailMessage.class));
     }
