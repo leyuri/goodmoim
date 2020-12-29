@@ -26,6 +26,8 @@ public class Account {
 
     private String emailCheckToken;
 
+    private LocalDateTime emailCheckTokenGeneratedAt;
+
     private LocalDateTime joinedAt;
 
     private String bio; //짧은 자기소개
@@ -53,6 +55,7 @@ public class Account {
 
     public void generateEmailCheckToken() {
         this.emailCheckToken = UUID.randomUUID().toString();
+        this.emailCheckTokenGeneratedAt = LocalDateTime.now();
     }
     // 이 두 라인은 account 에서 한번에 이루어져야 한다. (같은 로직)
     public void completeSignUp() {
@@ -62,5 +65,9 @@ public class Account {
 
     public boolean isValidToken(String token) {
         return this.emailCheckToken.equals(token);
+    }
+
+    public boolean canSendConfirmEmail() {
+        return this.emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusHours(1));
     }
 }

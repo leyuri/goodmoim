@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Service
@@ -28,20 +29,19 @@ public class AccountService {
         return newAccount;
     }
 
-    private Account saveNewAccount(SignUpForm signUpForm) {
+    private Account saveNewAccount(@Valid SignUpForm signUpForm) {
         Account account = Account.builder()
                 .email(signUpForm.getEmail())
                 .nickname(signUpForm.getNickname())
                 .password(passwordEncoder.encode(signUpForm.getPassword()))
-                .meetCreatedByWeb(true)
+                .meetUpdatedByWeb(true)
                 .meetEnrollmentResultByWeb(true)
                 .meetUpdatedByWeb(true)
                 .build();
-        Account newAccount = accountRepository.save(account);
-        return newAccount;
+        return accountRepository.save(account);
     }
 
-    private void sendSignUpConfirmEmail(Account newAccount) {
+    public void sendSignUpConfirmEmail(Account newAccount) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(newAccount.getEmail());
         mailMessage.setSubject("meet, 회원 가입 인증");
@@ -49,6 +49,8 @@ public class AccountService {
                 "&email=" + newAccount.getEmail());
         javaMailSender.send(mailMessage);
     }
+
+
 
 
     public void login(Account account) {
