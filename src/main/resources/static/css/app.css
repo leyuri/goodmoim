@@ -2,7 +2,7 @@
 
 .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
     color: aliceblue;
-    background-color: #52BE80 !important;
+    background-color: #28a745 !important;
 }
 
 a {
@@ -12,11 +12,17 @@ a {
 .dropdown-menu > a:hover {
     background-image: none;
     color: aliceblue;
-    background-color: #52BE80;
+    background-color: #28a745;
 }
 
 .dropdown-menu > form > button:hover {
     background-image: none;
     color: aliceblue;
-    background-color: #52BE80;
+    background-color: #28a745;
+}
+
+.list-group-item.active {
+    color: #fff !important;
+    background-color: #28a745 !important;
+    border-color: #28a745 !important;
 }
