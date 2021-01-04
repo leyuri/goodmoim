@@ -1,0 +1,22 @@
+/* bootstrap custom css */
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: aliceblue;
+    background-color: #52BE80 !important;
+}
+
+a {
+    color: #196F3D;
+}
+
+.dropdown-menu > a:hover {
+    background-image: none;
+    color: aliceblue;
+    background-color: #52BE80;
+}
+
+.dropdown-menu > form > button:hover {
+    background-image: none;
+    color: aliceblue;
+    background-color: #52BE80;
+}
