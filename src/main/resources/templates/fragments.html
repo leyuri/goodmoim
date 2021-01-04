@@ -8,6 +8,7 @@
     <title>StudyOlle</title>
     <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/app.css">
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/node_modules/jdenticon/dist/jdenticon.min.js"></script>
@@ -67,7 +68,7 @@
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#" th:href="@{'/settings/profile'}">설정</a>
                     <form class="form-inline my-2 my-lg-0" action="#" th:action="@{/logout}" method="post">
-                        <button class="dropdown-item" type="submit">로그아웃</button>
+                        <button class="btn btn-success dropdown-item" type="submit">로그아웃</button>
                     </form>
                 </div>
             </li>

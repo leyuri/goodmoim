@@ -18,13 +18,13 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor // final 이나 @NonNull 인 필드 값만 파라미터로 받는 생성자를 만들어줌
 public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
 
-    @Transactional
     public Account processNewAccount(SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm); // signUpForm 를 통해 새 계정을 저장
         newAccount.generateEmailCheckToken(); // check token 만들기
@@ -65,6 +65,7 @@ public class AccountService implements UserDetailsService {
 
     }
 
+    @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String emailOrNickname) throws UsernameNotFoundException {
         Account account = accountRepository.findByEmail(emailOrNickname);
@@ -77,5 +78,10 @@ public class AccountService implements UserDetailsService {
         }
         // 프린시펄에 해당하는 UserAccount
         return new UserAccount(account);
+    }
+
+    public void completeSignUp(Account account) {
+        account.completeSignUp();
+        login(account);
     }
 }
