@@ -2,8 +2,10 @@ package com.goodmoim.settings;
 
 import com.goodmoim.domain.Account;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class Profile {
 
     private String bio;
