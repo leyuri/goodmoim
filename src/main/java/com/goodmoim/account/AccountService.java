@@ -98,6 +98,6 @@ public class AccountService implements UserDetailsService {
 
     public void updatePassword(Account account, String newPassword) {
         account.setPassword(passwordEncoder.encode(newPassword));
-        accountRepository.save(account);
+        accountRepository.save(account); //merge
     }
 }

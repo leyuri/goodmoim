@@ -63,12 +63,15 @@ public class SettingsController {
     @PostMapping(SETTINGS_PASSWORD_URL)
     public String updatePassword(@CurrentUser Account account, @Valid PasswordForm passwordForm, Errors errors,
                                   Model model, RedirectAttributes attributes) {
+        // 에러가 있으면 모델에다가 account 넣어서 보내줌
         if (errors.hasErrors()) {
             model.addAttribute(account);
             return SETTINGS_PASSWORD_VIEW_NAME;
         }
 
+        // 에러가 없고 잘 진행되었다면 account에 password를 설정해주면 됨 . password를 받아서 account에서 업데이트 해줌
         accountService.updatePassword(account, passwordForm.getNewPassword());
+        // update가 잘 되었으면 메시지 전송
         attributes.addFlashAttribute("message", "패스워드를 변경했습니다.");
         return "redirect:" + SETTINGS_PASSWORD_URL;
     }
