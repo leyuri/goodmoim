@@ -62,6 +62,7 @@ class SettingsControllerTest {
         Account keesun = accountRepository.findByNickname("keesun");
         assertEquals(bio, keesun.getBio());
     }
+
     @WithAccount("keesun")
     @DisplayName("프로필 수정하기 - 입력값 에러")
     @Test
