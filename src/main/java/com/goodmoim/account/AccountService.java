@@ -1,6 +1,7 @@
 package com.goodmoim.account;
 
 import com.goodmoim.domain.Account;
+import com.goodmoim.settings.Notifications;
 import com.goodmoim.settings.Profile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
@@ -99,5 +100,16 @@ public class AccountService implements UserDetailsService {
     public void updatePassword(Account account, String newPassword) {
         account.setPassword(passwordEncoder.encode(newPassword));
         accountRepository.save(account); //merge
+    }
+
+    public void updateNotifications(Account account, Notifications notifications) {
+        account.setMeetCreatedByWeb(notifications.isMeetCreatedByWeb());
+        account.setMeetCreatedByEmail(notifications.isMeetCreatedByEmail());
+        account.setMeetUpdatedByEmail(notifications.isMeetUpdatedByEmail());
+        account.setMeetUpdatedByWeb(notifications.isMeetUpdatedByWeb());
+        account.setMeetEnrollmentResultByEmail(notifications.isMeetEnrollmentResultByEmail());
+        account.setMeetEnrollmentResultByWeb(notifications.isMeetEnrollmentResultByWeb());
+
+        accountRepository.save(account);
     }
 }

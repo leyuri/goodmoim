@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Getter @Setter @EqualsAndHashCode(of = "id")
+@Getter @Setter @EqualsAndHashCode(of = "id") // id만 사용하도록 함
 @Builder @AllArgsConstructor @NoArgsConstructor
 public class Account {
 
@@ -43,15 +43,15 @@ public class Account {
 
     private boolean meetCreatedByEmail;
 
-    private boolean meetCreatedByWeb;
+    private boolean meetCreatedByWeb = true;
 
     private boolean meetEnrollmentResultByEmail;
 
-    private boolean meetEnrollmentResultByWeb;
+    private boolean meetEnrollmentResultByWeb = true;
 
     private boolean meetUpdatedByEmail;
 
-    private boolean meetUpdatedByWeb;
+    private boolean meetUpdatedByWeb = true;
 
     public void generateEmailCheckToken() {
         this.emailCheckToken = UUID.randomUUID().toString();
